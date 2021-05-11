@@ -1,3 +1,4 @@
+using DataService.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,7 @@ namespace DataService
             var connectionString = "mongodb://localhost/?safe=true";
             var client = new MongoClient(connectionString);
             services.AddSingleton<IMongoClient>(client);
+            services.AddTransient<ISolarPredictionRepository, SolarPredictionRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

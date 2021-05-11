@@ -24,6 +24,14 @@ namespace DataService.Repository
             return collection.Find(FilterDefinition<SensorData>.Empty).ToList();
         }
 
+        public SensorData GetLastSensorData()
+        {
+            var db = client.GetDatabase("iot");
+            var collection = db.GetCollection<SensorData>("sensor-data");
+
+            return collection.Find(FilterDefinition<SensorData>.Empty).ToList().Last();
+        }
+
         public void PostSensorData(SensorData sensorData)
         {
             var db = client.GetDatabase("iot");

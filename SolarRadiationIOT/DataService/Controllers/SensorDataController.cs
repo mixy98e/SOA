@@ -14,38 +14,30 @@ namespace DataService.Controllers
     [ApiController]
     public class SensorDataController : ControllerBase
     {
-        private readonly IMongoClient client;
+        private ISolarPredictionRepository repository;
 
-        public SensorDataController(IMongoClient client)
+        public SensorDataController(ISolarPredictionRepository repository)
         {
-            this.client = client;
+            this.repository = repository;
         }
 
         [HttpGet("all")]
-        public ActionResult<IEnumerable<SensorData>> GetAll()
+        public IEnumerable<SensorData> GetAll()
         {
-            var db = client.GetDatabase("iot");
-            var collection = db.GetCollection<SensorData>("sensor-data");
-
-            return collection.Find(FilterDefinition<SensorData>.Empty).ToList();
+            return repository.GetSensorData();
         }
 
         [HttpGet("last")]
         public ActionResult<SensorData> GetLast()
         {
-            var db = client.GetDatabase("iot");
-            var collection = db.GetCollection<SensorData>("sensor-data");
-
-            return collection.Find(FilterDefinition<SensorData>.Empty).ToList().Last();
+            return repository.GetLastSensorData();
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] SensorData data)
         {
-            var db = client.GetDatabase("iot");
-            var collection = db.GetCollection<SensorData>("sensor-data");
-            
-            collection.InsertOne(data);
+            repository.PostSensorData(data);
+
             return CreatedAtAction(nameof(GetAll), new { id = data.UnixTime }, data);
         }
     }
