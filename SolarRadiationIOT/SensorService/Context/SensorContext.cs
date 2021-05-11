@@ -16,8 +16,8 @@ namespace SensorService.Context
         private SensorContext()
         {
             _interval = 5000;
-            _threshold = 0.01f;
-            _surcePath = " ";
+            _threshold = 0.1f;
+            _surcePath = ".\\DataSource\\SolarPredictionTestShort.csv";
         }
 
         public static SensorContext Instance
@@ -32,7 +32,10 @@ namespace SensorService.Context
             }
         }
 
-        public void SetInterval(int value) { _interval = value;  Console.WriteLine($"Sensor interval changed to value={value}"); }
+        public void SetInterval(int value) 
+        { 
+            _interval = value;  Console.WriteLine($"Sensor interval changed to value={value}"); 
+        }
         public void SetThreshold(float value) { _threshold = value; Console.WriteLine($"Sensor threshold changed to vlaue={value}"); }
         public void SetSourcePath(string value) { _surcePath = value; Console.WriteLine($"Sensor source path changed to vlaue={value}"); }
 
