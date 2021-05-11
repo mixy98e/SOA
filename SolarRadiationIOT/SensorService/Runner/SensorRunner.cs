@@ -21,10 +21,12 @@ namespace SensorService.Runner
         private static SensorContext _sc = SensorContext.Instance;
 
         private static int currLine;
+        private static float lastRadiation;
         public static void StartSensor()
         {
-           currLine = 0;
-           SetTimer(_sc.GetInterval());
+            currLine = 0;
+            lastRadiation = 0;
+            SetTimer(_sc.GetInterval());
         }
 
         private static void SetTimer(int initTickTime)
@@ -68,12 +70,16 @@ namespace SensorService.Runner
             sensorData.TimeSunRise = parsedData[8];
             sensorData.TimeSunSet = parsedData[9];
 
-            sendViaRest(sensorData);
 
-            float x = 0.15f;
-            if (x > _sc.GetThreshold())
-                Console.WriteLine($"threshodl passed - SENDING DATA {line}");
-            else Console.WriteLine($"threshodl NOT passed - NOT SENDING DATA {line}");
+            float difference;
+
+            if (lastRadiation != 0)
+                difference = Math.Abs(lastRadiation - sensorData.Radiation);
+            else difference = sensorData.Radiation;
+
+            if (difference > _sc.GetThreshold() )
+                sendViaRest(sensorData);
+            //else Console.WriteLine($"threshodl NOT passed - NOT SENDING DATA {line}");
         }
 
         //public methods

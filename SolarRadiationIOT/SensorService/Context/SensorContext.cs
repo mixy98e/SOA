@@ -16,7 +16,7 @@ namespace SensorService.Context
         private SensorContext()
         {
             _interval = 5000;
-            _threshold = 0.1f;
+            _threshold = 0.01f;
             _surcePath = ".\\DataSource\\SolarPredictionTestShort.csv";
         }
 
