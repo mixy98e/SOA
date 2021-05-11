@@ -68,7 +68,7 @@ namespace SensorService.Runner
             sensorData.TimeSunRise = parsedData[8];
             sensorData.TimeSunSet = parsedData[9];
 
-            Console.WriteLine(sensorData);
+            sendViaRest(sensorData);
 
             float x = 0.15f;
             if (x > _sc.GetThreshold())
@@ -94,7 +94,7 @@ namespace SensorService.Runner
             {
                 var c = JsonConvert.SerializeObject(sd);
                 StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                using (var response = await httpClient.PutAsync("http://gateway:3000/set", content))
+                using (var response = await httpClient.PostAsync("http://localhost:5000/SensorData", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     return new JsonResult(

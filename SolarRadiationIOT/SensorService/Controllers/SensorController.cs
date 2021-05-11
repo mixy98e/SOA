@@ -21,6 +21,7 @@ namespace SensorService.Controllers
         public IActionResult GetStart()
         {
             SensorRunner.StartSensor();
+            
             return Ok();
         }
 

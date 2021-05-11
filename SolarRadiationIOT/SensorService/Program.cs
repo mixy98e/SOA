@@ -10,7 +10,11 @@ using SensorService.Runner;
 using SensorService.Context;
 using System.Timers;
 using System.IO;
-
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Text;
+using SensorService.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SensorService
 {
@@ -24,7 +28,7 @@ namespace SensorService
 
             //string line = File.ReadLines(".\\DataSource\\SolarPredictionTestShort.csv").Skip(4).Take(1).First();
 
-           // Console.WriteLine(line);
+            // Console.WriteLine(line);
             //SetTimer(500);
 
             //Console.WriteLine("press to stop timer");
@@ -32,8 +36,6 @@ namespace SensorService
 
             aTimer.Stop();
             aTimer.Dispose();*/
-
-
 
 
 

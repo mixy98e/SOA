@@ -38,7 +38,7 @@ namespace DataService.Controllers
         {
             repository.PostSensorData(data);
 
-            return CreatedAtAction(nameof(GetAll), new { id = data.UnixTime }, data);
+            return Ok();//CreatedAtAction(nameof(GetAll), new { id = data.UnixTime }, data);
         }
     }
 }
