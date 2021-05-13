@@ -113,18 +113,28 @@ namespace SensorService.Runner
                 var c = JsonConvert.SerializeObject(sd);
                 StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
                 Console.WriteLine($"{content.ToString()}");
-               
-                using (var response = await httpClient.PostAsync("http://localhost:5000/SensorData", content))
+
+                try
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    return new JsonResult(
-                        new
-                        {
-                            resp = apiResponse,
-                            message = "Data successfully sent",
-                        }
-                    );
+                    using (var response = await httpClient.PostAsync("http://host.docker.internal:5000/SensorData", content))
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        return new JsonResult(
+                            new
+                            {
+                                resp = apiResponse,
+                                message = "Data successfully sent",
+                            }
+                        );
+                    }
                 }
+                catch(HttpRequestException e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
+                
+                return null;
+                
             }
         }
 
