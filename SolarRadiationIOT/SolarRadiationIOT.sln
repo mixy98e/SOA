@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataService", "DataService\DataService.csproj", "{87CEB55A-6F03-4338-A777-10F78D4B4C32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensorService", "SensorService\SensorService.csproj", "{62740DBB-8AA5-48FF-B090-8147E1A020B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SensorService", "SensorService\SensorService.csproj", "{62740DBB-8AA5-48FF-B090-8147E1A020B1}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E8835917-8281-4628-A698-43B9A83326A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{62740DBB-8AA5-48FF-B090-8147E1A020B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62740DBB-8AA5-48FF-B090-8147E1A020B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62740DBB-8AA5-48FF-B090-8147E1A020B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8835917-8281-4628-A698-43B9A83326A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8835917-8281-4628-A698-43B9A83326A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8835917-8281-4628-A698-43B9A83326A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8835917-8281-4628-A698-43B9A83326A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

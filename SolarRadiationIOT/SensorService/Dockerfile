@@ -11,9 +11,11 @@ RUN dotnet restore "SensorService/SensorService.csproj"
 COPY . .
 WORKDIR "/src/SensorService"
 RUN dotnet build "SensorService.csproj" -c Release -o /app/build
+ADD DataSource/SolarPredictionTestShort.csv /app/DataSource/SolarPredictionTestShort.csv
 
 FROM build AS publish
 RUN dotnet publish "SensorService.csproj" -c Release -o /app/publish
+ADD DataSource/SolarPredictionTestShort.csv /app/DataSource/SolarPredictionTestShort.csv
 
 FROM base AS final
 WORKDIR /app

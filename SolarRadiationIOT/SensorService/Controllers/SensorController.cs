@@ -11,7 +11,7 @@ using SensorService.Context;
 
 namespace SensorService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class SensorController : ControllerBase
     {
@@ -22,6 +22,13 @@ namespace SensorService.Controllers
         {
             SensorRunner.StartSensor();
             
+            return Ok();
+        }
+
+        [HttpGet("stop")]
+        public IActionResult GetStop()
+        {
+            SensorRunner.StopSensor();
             return Ok();
         }
 
@@ -40,5 +47,13 @@ namespace SensorService.Controllers
             SensorRunner.ChgSensorThreshold(newThreshold);
             return Ok();
         }
+
+        //[HttpGet("datapath/{newPath}")]
+        //public IActionResult GetPath(string newPath)
+        //{
+        //    //if (sr == null) return NotFound();
+        //    SensorRunner.ChgSensorDataPath(newPath);
+        //    return Ok();
+        //}
     }
 }

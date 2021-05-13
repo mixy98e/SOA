@@ -29,6 +29,10 @@ namespace SensorService.Runner
             SetTimer(_sc.GetInterval());
         }
 
+        public static void StopSensor()
+        {
+            _aTimer.Stop();
+        }
         private static void SetTimer(int initTickTime)
         {
             _aTimer = new System.Timers.Timer(initTickTime);
@@ -89,17 +93,27 @@ namespace SensorService.Runner
             Console.WriteLine(_sc.GetThreshold());
         }
 
+        //public static void ChgSensorDataPath(string newDataPath)
+        //{
+        //    _sc.SetSourcePath(newDataPath);
+        //    Console.WriteLine(_sc.GetSourcePath());
+        //}
+
         //public void ChgSensorSourcePath(string sourcePath)
         //{
         //    _sc.SetSourcePath(sourcePath);
         //}
-        
+
         public static async Task<IActionResult> sendViaRest(SensorData sd)
         {
+            Console.WriteLine(sd.UnixTime);
+            Console.WriteLine(Directory.GetCurrentDirectory());
             using (var httpClient = new HttpClient())
             {
                 var c = JsonConvert.SerializeObject(sd);
                 StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+                Console.WriteLine($"{content.ToString()}");
+               
                 using (var response = await httpClient.PostAsync("http://localhost:5000/SensorData", content))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();

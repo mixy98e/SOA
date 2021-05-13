@@ -1,0 +1,31 @@
+version: '3.4'
+
+    
+
+services:
+  sensorservice:
+    image: ${DOCKER_REGISTRY-}sensorservice
+    build:
+      context: .
+      dockerfile: SensorService/Dockerfile
+    ports:
+      - 5001:80
+
+  dataservice:
+    image: ${DOCKER_REGISTRY-}dataservice
+    build:
+      context: .
+      dockerfile: DataService/Dockerfile
+    ports:
+      - 5000:80
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/data/db
+volumes:
+  mongodata:

@@ -42,7 +42,7 @@ namespace DataService
                            .AllowAnyOrigin();
                 });
             });
-            var connectionString = "mongodb://localhost/?safe=true";
+            var connectionString = "mongodb://mongo:27017";
             var client = new MongoClient(connectionString);
             services.AddSingleton<IMongoClient>(client);
             services.AddTransient<ISolarPredictionRepository, SolarPredictionRepository>();
