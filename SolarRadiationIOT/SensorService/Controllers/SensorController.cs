@@ -17,6 +17,17 @@ namespace SensorService.Controllers
     {
         private SensorContext _sc = SensorContext.Instance;
 
+        [HttpGet("metadata")]
+        public ActionResult<Object> GetMetaData()
+        {
+            return new
+            {
+                interval = _sc.GetInterval(),
+                threshold = _sc.GetThreshold(),
+                dataSource = _sc.GetSourcePath()
+            };
+        }
+
         [HttpGet("start")]
         public IActionResult GetStart()
         {
@@ -32,16 +43,16 @@ namespace SensorService.Controllers
             return Ok();
         }
 
-        [HttpGet("interval/{newInterval}")]
-        public IActionResult GetInt(int newInterval)
+        [HttpPut("interval")]
+        public IActionResult PutInt([FromBody]int newInterval)
         {
             //if (sr == null) return NotFound();
             SensorRunner.ChgSensorInterval(newInterval);
             return Ok();
         }
 
-        [HttpGet("thrshold/{newThreshold}")]
-        public IActionResult GetThrs(float newThreshold)
+        [HttpPut("threshold")]
+        public IActionResult PutThrs([FromBody]float newThreshold)
         {
             //if (sr == null) return NotFound();
             SensorRunner.ChgSensorThreshold(newThreshold);
