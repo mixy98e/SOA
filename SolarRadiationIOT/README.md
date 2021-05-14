@@ -8,14 +8,14 @@ Project:
 build 
 
 >docker-compose up --build
-	result: 
-		3 running services:
-		-DataService
-		-SensorService
-		-MongoDB
-		
-		1 volume
-		-MongoDB volume
+>command result: 
+	3 services
+	-DataService
+	-SensorService
+	-MongoDB
+	
+	1 volume
+	-MongoDB volume
 
 DataService API:
 ----------------
