@@ -8,7 +8,8 @@ Project:
 build 
 
 >docker-compose up --build
-	result: 3 running services:
+	result: 
+		3 running services:
 		-DataService
 		-SensorService
 		-MongoDB
