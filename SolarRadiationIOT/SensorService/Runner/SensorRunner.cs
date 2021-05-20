@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SensorService.Runner
 {
-    public class SensorRunner
+    public static class SensorRunner
     {
         private static System.Timers.Timer _aTimer;
 
@@ -51,6 +51,8 @@ namespace SensorService.Runner
         public static void ChgSensorInterval(int newTickTime)
         {
             _sc.SetInterval(newTickTime);
+            if (_aTimer == null)
+                return;
             _aTimer.Stop();
             _aTimer.Interval = newTickTime;
             _aTimer.Start();
@@ -133,8 +135,7 @@ namespace SensorService.Runner
                     Console.WriteLine(e.StackTrace);
                 }
                 
-                return null;
-                
+                return null;                
             }
         }
 

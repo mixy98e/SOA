@@ -17,6 +17,8 @@ namespace SensorService.Controllers
     {
         private SensorContext _sc = SensorContext.Instance;
 
+        
+
         [HttpGet("metadata")]
         public ActionResult<Object> GetMetaData()
         {

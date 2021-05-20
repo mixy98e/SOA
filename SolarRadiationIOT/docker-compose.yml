@@ -21,11 +21,22 @@ services:
     depends_on:
       - mongo
 
+  analystservice:
+    image: ${DOCKER_REGISTRY-}analystservice
+    ports:
+      - 5002:80
+    build:
+      context: .
+      dockerfile: AnalystService/Dockerfile
+
   mongo:
     image: mongo
     ports:
       - 27017:27017
     volumes:
       - mongodata:/data/db
+
+
+
 volumes:
   mongodata:
