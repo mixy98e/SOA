@@ -50,7 +50,7 @@ namespace DataService.Controllers
 
                 try
                 {
-                    using (var response = await httpClient.PostAsync("http://host.docker.internal:5002/Analyst/", content))
+                    using (var response = await httpClient.PostAsync("http://analystservice:80/Analyst/", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         return new JsonResult(

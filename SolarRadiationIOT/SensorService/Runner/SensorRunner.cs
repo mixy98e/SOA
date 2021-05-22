@@ -118,7 +118,7 @@ namespace SensorService.Runner
 
                 try
                 {
-                    using (var response = await httpClient.PostAsync("http://host.docker.internal:5000/SensorData", content))
+                    using (var response = await httpClient.PostAsync("http://dataservice:80/SensorData", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         return new JsonResult(

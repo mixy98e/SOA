@@ -18,7 +18,7 @@ namespace AnalystService.Analyst
         private DateTime _date1 = new DateTime(0001, 1, 1, 19, 0, 0);
         private DateTime _date2 = new DateTime(0001, 1, 1, 5, 0, 0);
         private string _path = "./Log.txt";
-        private string _url = "http://host.docker.internal:5001/Sensor/";
+        private string _url = "http://sensorservice:80/Sensor/";
 
         public bool Running
         {
