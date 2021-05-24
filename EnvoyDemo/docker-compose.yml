@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  foodapi:
+    image: ${DOCKER_REGISTRY-}foodapi
+    ports:
+        - 5001:80
+    build:
+      context: .
+      dockerfile: FoodAPI/Dockerfile
+
+  beverageapi:
+    image: ${DOCKER_REGISTRY-}beverageapi
+    ports:
+        - 5002:80
+    build:
+      context: .
+      dockerfile: BeverageAPI/Dockerfile
+
