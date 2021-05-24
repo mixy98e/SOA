@@ -17,3 +17,10 @@ services:
       context: .
       dockerfile: BeverageAPI/Dockerfile
 
+  envoygateway:
+    build: Envoy/
+    ports:
+        - "9901:9901"
+        - "10000:10000"
+    volumes:
+        - ./Envoy/envoy.yaml:/etc/envoy/envoy.yaml
