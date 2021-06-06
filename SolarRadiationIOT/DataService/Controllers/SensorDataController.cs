@@ -38,7 +38,7 @@ namespace DataService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] SensorData data)
+        public IActionResult Post([FromBody] SensorData data)
         {
             // Upis u bazu
             repository.PostSensorData(data);

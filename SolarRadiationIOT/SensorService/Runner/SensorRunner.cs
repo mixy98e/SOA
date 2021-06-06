@@ -108,6 +108,9 @@ namespace SensorService.Runner
 
         public static async Task<IActionResult> sendViaRest(SensorData sd)
         {
+            _aTimer.Stop();
+
+
             Console.WriteLine(sd.UnixTime);
             Console.WriteLine(Directory.GetCurrentDirectory());
             using (var httpClient = new HttpClient())

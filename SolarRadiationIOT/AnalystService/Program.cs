@@ -1,3 +1,4 @@
+using AnalystService.Mqtt;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,10 @@ namespace AnalystService
     {
         public static void Main(string[] args)
         {
+            //Console.ReadLine();
+            Subscriber subscriber = new Subscriber();
+            subscriber.Subscribe("DataServiceQueue");
+
             CreateHostBuilder(args).Build().Run();
         }
 

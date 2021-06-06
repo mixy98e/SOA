@@ -13,7 +13,7 @@ namespace DataService.Mqtt
 
         public Publisher()
         {
-            var factory = new ConnectionFactory()
+            this.factory = new ConnectionFactory()
             {
                 HostName = "rabbitmq",
                 Port = 5672,
@@ -27,11 +27,17 @@ namespace DataService.Mqtt
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare(exchange: queueName, type: ExchangeType.Fanout);
+                //channel.ExchangeDeclare(exchange: queueName, type: ExchangeType.Fanout);
+                channel.QueueDeclare(queue: "test_queue",
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
 
                 var body = Encoding.UTF8.GetBytes(content);
-                channel.BasicPublish(exchange: queueName,
-                                     routingKey: "",
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "test_queue",
+                                     mandatory: true,
                                      basicProperties: null,
                                      body: body);
             }

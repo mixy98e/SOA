@@ -29,12 +29,17 @@ namespace AnalystService.Mqtt
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare(exchange: qName, type: ExchangeType.Fanout);
+                //channel.ExchangeDeclare(exchange: qName, type: ExchangeType.Fanout);
+                channel.QueueDeclare(queue: "test_queue",
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
 
-                var queueName = channel.QueueDeclare().QueueName;
-                channel.QueueBind(queue: queueName,
+                //var queueName = channel.QueueDeclare().QueueName;
+                /*channel.QueueBind(queue: queueName,
                                   exchange: qName,
-                                  routingKey: "");
+                                  routingKey: "");*/
                 var consumer = new EventingBasicConsumer(channel);
 
                 consumer.Received += (model, ea) =>
@@ -50,7 +55,7 @@ namespace AnalystService.Mqtt
 
                 };
 
-                channel.BasicConsume(queue: queueName,
+                channel.BasicConsume(queue: "test_queue",
                                      autoAck: true,
                                      consumer: consumer);
             }
