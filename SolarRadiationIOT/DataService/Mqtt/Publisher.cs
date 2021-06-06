@@ -1,4 +1,6 @@
-﻿using RabbitMQ.Client;
+﻿using DataService.Models;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +24,7 @@ namespace DataService.Mqtt
             };
         }
 
-        public void Publish(string content, string queueName)
+        public void Publish(SensorData content, string queueName)
         {
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
@@ -34,7 +36,8 @@ namespace DataService.Mqtt
                                      autoDelete: false,
                                      arguments: null);
 
-                var body = Encoding.UTF8.GetBytes(content);
+                string datajson = JsonConvert.SerializeObject(content);
+                var body = Encoding.UTF8.GetBytes(datajson);
                 channel.BasicPublish(exchange: "",
                                      routingKey: "test_queue",
                                      mandatory: true,

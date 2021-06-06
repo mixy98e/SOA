@@ -43,12 +43,9 @@ namespace DataService.Controllers
             // Upis u bazu
             repository.PostSensorData(data);
 
-            var c = JsonConvert.SerializeObject(data);
-            StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-            Console.WriteLine($"{content}");
-
-            var publisher = new Publisher();
-            publisher.Publish(content.ToString(), "DataServiceQueue");
+            // Slanje na analizu
+            Publisher publisher = new Publisher();
+            publisher.Publish(data, "DataServiceQueue");
 
 
             return Ok();

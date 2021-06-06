@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnalystService.Analyst;
 using AnalystService.Model;
+using AnalystService.Mqtt;
 
 namespace AnalystService.Controllers
 {
@@ -15,11 +16,12 @@ namespace AnalystService.Controllers
     {
         DataAnalyst _da = new DataAnalyst();
 
+
         [HttpGet("test")]
         public ActionResult<string> GetTest()
         {
             _da.testfun(10f, 10f);
-            return $"I am alive (log path = {_da.Path})"; 
+            return $"I am alive (log path = {_da.Path})";
         }
 
         [HttpGet("startstop")]

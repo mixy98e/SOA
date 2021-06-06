@@ -45,6 +45,8 @@ namespace AnalystService.Analyst
             return dtDateTime;
         }
 
+
+        // will bi swaped with database----------------------------------
         private void _SaveLog(float threshold, float interval)
         {
             Console.WriteLine($"AnalystService - Log: Time={DateTime.Now}, " +
@@ -69,7 +71,6 @@ namespace AnalystService.Analyst
                 }
             }
         }
-
         public List<string> ReadLog()
         {
             List<string> list = new List<string>();
@@ -84,7 +85,10 @@ namespace AnalystService.Analyst
 
             return list;
         }
+        //----------------------------------------------------------------
 
+
+        // Invalid rest requests will be swaped for mqtt---------------------
         public async Task<SensorMetaData> _GetMetaDataFromSensorAsync()
         {
             using (var httpClient = new HttpClient())
@@ -107,7 +111,6 @@ namespace AnalystService.Analyst
                 return null;
             }
         }
-
         private async Task<IActionResult> _SetThreshold(float threshold)
         {
             using (var httpClient = new HttpClient())
@@ -137,13 +140,11 @@ namespace AnalystService.Analyst
                 return null;
             }
         }
-
         public void testfun(float x, float y)
         {
             _SetThreshold(x);
             _SetInterval(y);
         }
-
         private async Task<IActionResult> _SetInterval(float interval)
         {
             using (var httpClient = new HttpClient())
@@ -173,6 +174,8 @@ namespace AnalystService.Analyst
                 return null;
             }
         }
+        //--------------------------------------------------------------------
+
 
         public async Task Analyze(SensorData sd)
         {
@@ -189,7 +192,10 @@ namespace AnalystService.Analyst
                 if (_night != null && _night == true) return;
                 //Night time settings
                 _night = true;
+                //obrisati
                 SensorMetaData metaData = _GetMetaDataFromSensorAsync().Result;
+                //----------
+
                 newThreshold = metaData.Threshold * 1.5f;
                 newInterval = metaData.Interval * 2f;
             }
@@ -202,9 +208,28 @@ namespace AnalystService.Analyst
                 newThreshold = 25.0f;
             }
 
-            await _SetThreshold(newThreshold);
-            await _SetInterval(newInterval);
+            //await _SetThreshold(newThreshold);
+            //await _SetInterval(newInterval);
             _SaveLog(newThreshold, newInterval);
         }
     }
 }
+/*
+if vetar>nesto && temperatura>nesto && vlaznost<nesto && presure>nesto && presure<nesto
+{
+    if(radiation > 400)
+        potencijalno visoka radijacija
+    else
+        nije
+}
+else
+    vreme nije pogodno
+*/
+
+/*
+AnalystService      -> podaci ->     comand
+            [visoko nisko nesto tako]
+
+command vrsi pozive iz 91 - 148 iniju
+
+*/

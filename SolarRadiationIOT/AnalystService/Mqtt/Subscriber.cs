@@ -14,21 +14,27 @@ namespace AnalystService.Mqtt
     public class Subscriber
     {
 
-        private ConnectionFactory factory = new ConnectionFactory();
+        private ConnectionFactory factory;
         private DataAnalyst _da = new DataAnalyst();
+        private IModel channel;
+        private IConnection connection;
+
+
         public Subscriber()
         {
-            factory.HostName = "rabbitmq";
-            factory.Port = 5672;
-            factory.UserName = "guest";
-            factory.Password = "guest";
+            factory = new ConnectionFactory()
+            {
+                HostName = "rabbitmq",
+                Port = 5672,
+                UserName = "guest",
+                Password = "guest"
+            };
+            connection = factory.CreateConnection();
+            channel = connection.CreateModel();
         }
 
         public void Subscribe(string qName)
         {
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
                 //channel.ExchangeDeclare(exchange: qName, type: ExchangeType.Fanout);
                 channel.QueueDeclare(queue: "test_queue",
                                      durable: false,
@@ -47,8 +53,8 @@ namespace AnalystService.Mqtt
                     var body = ea.Body.ToArray();
                     var message = Encoding.UTF8.GetString(body);
                     Console.WriteLine("Analyst service: Recieved [JSON message] from DataService: message=" + message);
-                    SensorData sensorData = JsonConvert.DeserializeObject<SensorData>(message);
-                    Console.WriteLine("Analyst service: Deserialized object from message: object="+sensorData);
+                    SensorData sensorData = JsonConvert.DeserializeObject<SensorData>(message.ToString());
+                    Console.WriteLine("Analyst service: Deserialized object from message: object=" + sensorData.UnixTime);
 
                     //send object for further analize
                     _da.Analyze(sensorData);
@@ -58,7 +64,6 @@ namespace AnalystService.Mqtt
                 channel.BasicConsume(queue: "test_queue",
                                      autoAck: true,
                                      consumer: consumer);
-            }
         }
 
 

@@ -14,9 +14,8 @@ namespace AnalystService
     {
         public static void Main(string[] args)
         {
-            //Console.ReadLine();
-            Subscriber subscriber = new Subscriber();
-            subscriber.Subscribe("DataServiceQueue");
+            Subscriber sub = new Subscriber();
+            sub.Subscribe("test_queue");
 
             CreateHostBuilder(args).Build().Run();
         }
