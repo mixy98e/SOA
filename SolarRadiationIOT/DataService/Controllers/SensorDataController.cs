@@ -10,7 +10,7 @@ using MongoDB.Driver.Linq;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
-
+using DataService.Mqtt;
 
 namespace DataService.Controllers
 {
@@ -40,37 +40,18 @@ namespace DataService.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] SensorData data)
         {
+            // Upis u bazu
             repository.PostSensorData(data);
 
-            using (var httpClient = new HttpClient())
-            {
-                var c = JsonConvert.SerializeObject(data);
-                StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-                Console.WriteLine($"{content.ToString()}");
+            var c = JsonConvert.SerializeObject(data);
+            StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
+            Console.WriteLine($"{content}");
 
-                try
-                {
-                    using (var response = await httpClient.PostAsync("http://analystservice:80/Analyst/", content))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        return new JsonResult(
-                            new
-                            {
-                                resp = apiResponse,
-                                message = "Data successfully sent",
-                            }
-                        );
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine(e.StackTrace);
-                }
+            var publisher = new Publisher();
+            publisher.Publish(content.ToString(), "DataServiceQueue");
 
-                return null;
-            }
 
-            return Ok();//CreatedAtAction(nameof(GetAll), new { id = data.UnixTime }, data);
+            return Ok();
         }
     }
 }
