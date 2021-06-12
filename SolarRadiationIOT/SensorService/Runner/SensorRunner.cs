@@ -45,6 +45,10 @@ namespace SensorService.Runner
         private static void OnTimerEvent(Object source, ElapsedEventArgs e)
         {
             Console.WriteLine("Tick tick tick ...", e.SignalTime);
+
+            //kocnica
+            //_aTimer.Stop();
+
             SendData();
         }
 
@@ -58,7 +62,7 @@ namespace SensorService.Runner
             _aTimer.Start();
         }
 
-        private static void SendData()
+        public static void SendData() //private -> public
         {
             Console.WriteLine($"uso0, {_sc.GetSourcePath()}");
             string line = File.ReadLines(_sc.GetSourcePath()).Skip(currLine).Take(1).First();

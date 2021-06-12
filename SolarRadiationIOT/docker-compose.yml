@@ -32,6 +32,17 @@ services:
     depends_on:
       - rabbitmq
 
+
+  commandservice:
+    image: ${DOCKER_REGISTRY-}commandservice
+    ports:
+      - 5003:80
+    build:
+      context: .
+      dockerfile: CommandService/Dockerfile
+    depends_on:
+      - rabbitmq
+
   mongo:
     image: mongo
     ports:
@@ -52,6 +63,6 @@ services:
       - "15671:15671"
       - "15672:15672"
 
-
 volumes:
   mongodata:
+

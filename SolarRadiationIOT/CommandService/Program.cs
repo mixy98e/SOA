@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandService.Mqtt;
 
 namespace CommandService
 {
@@ -13,6 +14,9 @@ namespace CommandService
     {
         public static void Main(string[] args)
         {
+            Subscriber sub = new Subscriber();
+            sub.Subscribe("AnalystServiceQueue");
+
             CreateHostBuilder(args).Build().Run();
         }
 

@@ -19,7 +19,6 @@ namespace AnalystService.Analyst
         private DateTime _date1 = new DateTime(0001, 1, 1, 19, 0, 0);
         private DateTime _date2 = new DateTime(0001, 1, 1, 5, 0, 0);
         private string _path = "./Log.txt";
-        private string _url = "http://sensorservice:80/Sensor/";
 
 
         public bool Running
@@ -95,70 +94,67 @@ namespace AnalystService.Analyst
 
         public async Task Analyze(SensorData sd)
         {
+            Console.WriteLine("AnalystService: Analyze started");
             if (!_running)
                 return;
 
-            float newThreshold;
-            float newInterval;
             AnalystResult _ar = new AnalystResult();
 
-
+            //-----
             DateTime tmpTime = _UnixTimeStampToDateTime(sd.UnixTime);
+
             if (tmpTime.TimeOfDay > _date1.TimeOfDay
                 || tmpTime.TimeOfDay < _date2.TimeOfDay)
-            {
-                if (_night != null && _night == true) 
-                    return;
-
-                //Night time settings
-                _night = true;
-                //obrisati
-                //SensorMetaData metaData = _GetMetaDataFromSensorAsync().Result;
-                //----------
-                //newThreshold = metaData.Threshold * 1.5f;
-
-                _ar.DayTimeDay = false;
-            }
+                _ar.DayTimeDay = true;//korekcija
             else
-            {
-                if (_night !=null && _night == false) return;
-                //Day time settings
-                _night = false;
-                _ar.DayTimeDay = true;
-                //newThreshold = 25.6f;
-            }
+                _ar.DayTimeDay = false;
 
-            //await _SetThreshold(newThreshold);
-            //await _SetInterval(newInterval);
-            //_SaveLog(newThreshold, newInterval);
-
+            Console.WriteLine($"time: {tmpTime.TimeOfDay.ToString()} flag(false == day): {_ar.DayTimeDay}");
+            
             _ar.HighRisk = false;
-            if(sd.Speed< 5.82f && sd.Temperature > 56f && sd.Humidity< 69.93f && sd.Pressure < 30.43)
+            if (sd.Speed < 5.82f && sd.Temperature > 56f && sd.Humidity < 69.93f && sd.Pressure < 30.43)
             {   //vreme je pogodno
                 _ar.WeatherGood = true;
-                
-                if(sd.Radiation > 229.6f)
-                {   //visoka radijacija
-                    //newInterval = 5000.0f;
+
+                if (sd.Radiation > 229.6f)
+                {
+                    //visoka radijacija
                     _ar.RadiationHigh = true;
                     _ar.HighRisk = true;
                 }
                 else
-                {   //niska radijacija
-                    newInterval = 15000.0f;
+                {
+                    //niska radijacija
                     _ar.RadiationHigh = false;
+                    _ar.HighRisk = false;
                 }
             }
             else
+            {
                 //vreme nije pogodno
                 _ar.WeatherGood = false;
+                _ar.HighRisk = false;
 
+                if (sd.Radiation > 229.6f)
+                {
+                    //visoka radijacija
+                    _ar.RadiationHigh = true;
+                }
+                else
+                {
+                    //niska radijacija
+                    _ar.RadiationHigh = false;
+                }
+            }
+
+
+            //-----*/
             _ar.TimeStamp = DateTime.Now;
 
             var publisher = new Publisher();
-            publisher.Publish(_ar, "DataAnalystQueue");
+            publisher.Publish(_ar, "AnalystServiceQueue");
 
-            //command vrsi pozive iz 91 - 148 iniju
+            Console.WriteLine("AnalystService is published data");
         }
     }
 }

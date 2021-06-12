@@ -20,8 +20,7 @@ namespace AnalystService.Controllers
         [HttpGet("test")]
         public ActionResult<string> GetTest()
         {
-            _da.testfun(10f, 10f);
-            return $"I am alive (log path = {_da.Path})";
+            return $"[AnalystService] I am alive (log path = {_da.Path})";
         }
 
         [HttpGet("startstop")]

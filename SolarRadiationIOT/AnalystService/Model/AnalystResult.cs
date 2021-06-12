@@ -7,11 +7,11 @@ namespace AnalystService.Model
 {
     public class AnalystResult
     {
-        public bool RadiationHigh { get; set; }
-        public bool DayTimeDay { get; set; }
-        public bool WeatherGood { get; set; }
+        public bool RadiationHigh { get; set; } = false;
+        public bool DayTimeDay { get; set; } = false;
+        public bool WeatherGood { get; set; } = false;
         public DateTime TimeStamp { get; set; }
-        public bool HighRisk { get; set; }
+        public bool HighRisk { get; set; } = false;
 
     }
 }

@@ -15,8 +15,45 @@ namespace CommandService.Command
         private string _url = "http://sensorservice:80/Sensor/";
         public void checkCommands(AnalystResult ar)
         {
-            //if(ar.RadiationHigh)
-                
+            SensorMetaData smd =  _GetMetaDataFromSensorAsync().Result;
+
+            //testfun(69f, 69f);
+
+            if (ar.DayTimeDay)
+            {
+                Console.WriteLine("CommandProcessing: daytime day");
+                if (ar.RadiationHigh)
+                {
+                    Console.WriteLine("CommandProcessing: radiation high");
+                    if (ar.WeatherGood)
+                    {
+                        _SetInterval(5000f, smd.Interval); //interval=5s i tsh=2.5
+                        Console.WriteLine("CommandProcessing: weather good");
+                    }
+                    else
+                    {
+                        _SetInterval(15000f, smd.Interval);//interval=15s i tsh=2.5
+                        Console.WriteLine("CommandProcessing: weather bad");
+                    }
+                    _SetThreshold(25f, smd.Threshold);
+                }
+                else
+                {
+                    Console.WriteLine("CommandProcessing: radiation low");
+                    // int 10s tsh 75
+                    _SetInterval(10000f, smd.Interval);
+                    _SetThreshold(75f, smd.Threshold);
+                }
+            }
+            else 
+            {
+                _SetInterval(15000f, smd.Interval);
+                _SetThreshold(0.025f, smd.Threshold);//0.025
+                Console.WriteLine("CommandProcessing: daytime night");
+            }
+
+            
+
         }
 
   
@@ -43,8 +80,11 @@ namespace CommandService.Command
                 return null;
             }
         }
-        private async Task<IActionResult> _SetThreshold(float threshold)
+        private async Task<IActionResult> _SetThreshold(float threshold, float oldThreshold)
         {
+            if (threshold == oldThreshold)
+                return null;
+
             using (var httpClient = new HttpClient())
             {
                 var c = JsonConvert.SerializeObject(threshold);
@@ -72,16 +112,16 @@ namespace CommandService.Command
                 return null;
             }
         }
-        public void testfun(float x, float y)
+        private async Task<IActionResult> _SetInterval(float interval, float oldInterval)
         {
-            _SetThreshold(x);
-            _SetInterval(y);
-        }
-        private async Task<IActionResult> _SetInterval(float interval)
-        {
+            if (interval == oldInterval)
+                return null;
+
+            int intervalTmp = (int)interval;
+
             using (var httpClient = new HttpClient())
             {
-                var c = JsonConvert.SerializeObject(interval);
+                var c = JsonConvert.SerializeObject(intervalTmp);
                 StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
 
                 try
@@ -106,8 +146,11 @@ namespace CommandService.Command
                 return null;
             }
         }
-        //--------------------------------------------------------------------
-
+        public void testfun(float x, float y)
+        {
+            _SetThreshold(x,0);
+            _SetInterval(y,0);
+        }
 
     }
 }
