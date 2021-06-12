@@ -20,6 +20,7 @@ namespace AnalystService.Analyst
         private string _path = "./Log.txt";
         private string _url = "http://sensorservice:80/Sensor/";
 
+
         public bool Running
         {
             get { return _running; }
@@ -73,6 +74,8 @@ namespace AnalystService.Analyst
         }
         public List<string> ReadLog()
         {
+            return null;
+
             List<string> list = new List<string>();
             string s;
             using (StreamReader sr = File.OpenText(_path))
@@ -88,95 +91,6 @@ namespace AnalystService.Analyst
         //----------------------------------------------------------------
 
 
-        // Invalid rest requests will be swaped for mqtt---------------------
-        public async Task<SensorMetaData> _GetMetaDataFromSensorAsync()
-        {
-            using (var httpClient = new HttpClient())
-            {
-                try
-                {
-                    using (var response = await httpClient.GetAsync($"{_url}metadata"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        SensorMetaData metadata = JsonConvert.DeserializeObject<SensorMetaData>(apiResponse);
-
-                        return metadata;
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine(e.StackTrace);
-                }
-
-                return null;
-            }
-        }
-        private async Task<IActionResult> _SetThreshold(float threshold)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                var c = JsonConvert.SerializeObject(threshold);
-                StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-
-                try
-                {
-                    using (var response = await httpClient.PutAsync($"{_url}threshold", content))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        return new JsonResult(
-                            new
-                            {
-                                resp = apiResponse,
-                                message = "Data successfully sent",
-                            }
-                        );
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine(e.StackTrace);
-                }
-
-                return null;
-            }
-        }
-        public void testfun(float x, float y)
-        {
-            _SetThreshold(x);
-            _SetInterval(y);
-        }
-        private async Task<IActionResult> _SetInterval(float interval)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                var c = JsonConvert.SerializeObject(interval);
-                StringContent content = new StringContent(c, Encoding.UTF8, "application/json");
-
-                try
-                {
-                    using (var response = await httpClient.PutAsync($"{_url}interval", content))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        return new JsonResult(
-                            new
-                            {
-                                resp = apiResponse,
-                                message = "Data successfully sent",
-                            }
-                        );
-                    }
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine(e.StackTrace);
-                }
-
-                return null;
-            }
-        }
-        //--------------------------------------------------------------------
-
-
         public async Task Analyze(SensorData sd)
         {
             if (!_running)
@@ -184,52 +98,63 @@ namespace AnalystService.Analyst
 
             float newThreshold;
             float newInterval;
+            AnalystResult _ar = new AnalystResult();
+
 
             DateTime tmpTime = _UnixTimeStampToDateTime(sd.UnixTime);
             if (tmpTime.TimeOfDay > _date1.TimeOfDay
                 || tmpTime.TimeOfDay < _date2.TimeOfDay)
             {
-                if (_night != null && _night == true) return;
+                if (_night != null && _night == true) 
+                    return;
+
                 //Night time settings
                 _night = true;
                 //obrisati
-                SensorMetaData metaData = _GetMetaDataFromSensorAsync().Result;
+                //SensorMetaData metaData = _GetMetaDataFromSensorAsync().Result;
                 //----------
+                //newThreshold = metaData.Threshold * 1.5f;
 
-                newThreshold = metaData.Threshold * 1.5f;
-                newInterval = metaData.Interval * 2f;
+                _ar.DayTimeDay = false;
             }
             else
             {
                 if (_night !=null && _night == false) return;
                 //Day time settings
                 _night = false;
-                newInterval = 5000f;
-                newThreshold = 25.0f;
+                _ar.DayTimeDay = true;
+                //newThreshold = 25.6f;
             }
 
             //await _SetThreshold(newThreshold);
             //await _SetInterval(newInterval);
-            _SaveLog(newThreshold, newInterval);
+            //_SaveLog(newThreshold, newInterval);
+
+            _ar.HighRisk = false;
+            if(sd.Speed< 5.82f && sd.Temperature > 56f && sd.Humidity< 69.93f && sd.Pressure < 30.43)
+            {   //vreme je pogodno
+                _ar.WeatherGood = true;
+                
+                if(sd.Radiation > 229.6f)
+                {   //visoka radijacija
+                    //newInterval = 5000.0f;
+                    _ar.RadiationHigh = true;
+                    _ar.HighRisk = true;
+                }
+                else
+                {   //niska radijacija
+                    newInterval = 15000.0f;
+                    _ar.RadiationHigh = false;
+                }
+            }
+            else
+                //vreme nije pogodno
+                _ar.WeatherGood = false;
+
+            _ar.TimeStamp = DateTime.Now;
+
+            //command vrsi pozive iz 91 - 148 iniju
         }
     }
 }
-/*
-if vetar>nesto && temperatura>nesto && vlaznost<nesto && presure>nesto && presure<nesto
-{
-    if(radiation > 400)
-        potencijalno visoka radijacija
-    else
-        nije
-}
-else
-    vreme nije pogodno
-*/
 
-/*
-AnalystService      -> podaci ->     comand
-            [visoko nisko nesto tako]
-
-command vrsi pozive iz 91 - 148 iniju
-
-*/
