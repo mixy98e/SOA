@@ -36,7 +36,7 @@ namespace AnalystService.Mqtt
         public void Subscribe(string qName)
         {
                 //channel.ExchangeDeclare(exchange: qName, type: ExchangeType.Fanout);
-                channel.QueueDeclare(queue: "test_queue",
+                channel.QueueDeclare(queue: qName,
                                      durable: false,
                                      exclusive: false,
                                      autoDelete: false,
@@ -61,7 +61,7 @@ namespace AnalystService.Mqtt
 
                 };
 
-                channel.BasicConsume(queue: "test_queue",
+                channel.BasicConsume(queue: qName,
                                      autoAck: true,
                                      consumer: consumer);
         }

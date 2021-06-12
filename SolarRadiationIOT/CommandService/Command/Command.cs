@@ -1,13 +1,25 @@
-﻿using System;
+﻿using CommandService.Model;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CommandService.Command
 {
     public class Command
     {
-        /*
+        private string _url = "http://sensorservice:80/Sensor/";
+        public void checkCommands(AnalystResult ar)
+        {
+            //if(ar.RadiationHigh)
+                
+        }
+
+  
           // Invalid rest requests will be swaped for mqtt---------------------
         public async Task<SensorMetaData> _GetMetaDataFromSensorAsync()
         {
@@ -96,7 +108,6 @@ namespace CommandService.Command
         }
         //--------------------------------------------------------------------
 
-         */
 
     }
 }

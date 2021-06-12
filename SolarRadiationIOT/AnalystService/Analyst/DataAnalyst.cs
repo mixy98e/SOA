@@ -51,7 +51,7 @@ namespace AnalystService.Analyst
         // will bi swaped with database----------------------------------
         private void _SaveLog(float threshold, float interval)
         {
-            Console.WriteLine($"AnalystService - Log: Time={DateTime.Now}, " +
+           /* Console.WriteLine($"AnalystService - Log: Time={DateTime.Now}, " +
                 $"New threshold={threshold}, New interval={interval} -> Sent to SensorService at uri {_url}threshold");
 
             if (!File.Exists(_path))
@@ -71,11 +71,11 @@ namespace AnalystService.Analyst
                                     $"New threshold={threshold}, New interval={interval} " +
                                     $"-> Sent to SensorService at uri {_url}threshold");
                 }
-            }
+            }*/
         }
         public List<string> ReadLog()
         {
-            return null;
+            /*return null;
 
             List<string> list = new List<string>();
             string s;
@@ -87,7 +87,8 @@ namespace AnalystService.Analyst
                 }
             }
 
-            return list;
+            return list;*/
+            return null;
         }
         //----------------------------------------------------------------
 
