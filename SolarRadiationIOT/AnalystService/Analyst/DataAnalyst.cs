@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using AnalystService.Model;
+using AnalystService.Mqtt;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -152,6 +153,9 @@ namespace AnalystService.Analyst
                 _ar.WeatherGood = false;
 
             _ar.TimeStamp = DateTime.Now;
+
+            var publisher = new Publisher();
+            publisher.Publish(_ar, "DataAnalystQueue");
 
             //command vrsi pozive iz 91 - 148 iniju
         }

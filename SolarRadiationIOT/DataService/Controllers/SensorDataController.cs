@@ -44,7 +44,7 @@ namespace DataService.Controllers
             repository.PostSensorData(data);
 
             // Slanje na analizu
-            Publisher publisher = new Publisher();
+            var publisher = new Publisher();
             publisher.Publish(data, "DataServiceQueue");
 
 

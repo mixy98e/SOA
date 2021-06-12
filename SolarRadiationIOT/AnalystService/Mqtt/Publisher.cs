@@ -1,4 +1,4 @@
-﻿using DataService.Models;
+﻿using AnalystService.Model;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataService.Mqtt
+namespace AnalystService.Mqtt
 {
     public class Publisher
     {
@@ -24,7 +24,7 @@ namespace DataService.Mqtt
             };
         }
 
-        public void Publish(SensorData content, string queueName)
+        public void Publish(AnalystResult content, string queueName)
         {
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
