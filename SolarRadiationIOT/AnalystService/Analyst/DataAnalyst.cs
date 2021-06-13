@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AnalystService.Model;
 using AnalystService.Mqtt;
+using AnalystService.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -19,6 +20,7 @@ namespace AnalystService.Analyst
         private DateTime _date1 = new DateTime(0001, 1, 1, 19, 0, 0);
         private DateTime _date2 = new DateTime(0001, 1, 1, 5, 0, 0);
         private string _path = "./Log.txt";
+        private IAnalystServiceRepository repository;
 
 
         public bool Running
@@ -31,7 +33,6 @@ namespace AnalystService.Analyst
             get { return _night; }
             set { _night = value; }
         }
-
         public string Path
         {
             get { return _path; }
@@ -46,51 +47,15 @@ namespace AnalystService.Analyst
             return dtDateTime;
         }
 
-
-        // will bi swaped with database----------------------------------
-        private void _SaveLog(float threshold, float interval)
+        private void _SaveLog(AnalystResult result)
         {
-           /* Console.WriteLine($"AnalystService - Log: Time={DateTime.Now}, " +
-                $"New threshold={threshold}, New interval={interval} -> Sent to SensorService at uri {_url}threshold");
-
-            if (!File.Exists(_path))
-            {
-                using (StreamWriter sw = File.CreateText(_path))
-                {
-                    sw.WriteLine($"AnalystService - Log: Time={DateTime.Now}, " +
-                                    $"New threshold={threshold}, New interval={interval} " +
-                                    $"-> Sent to SensorService at uri {_url}threshold");
-                }
-            }
-            else
-            {
-                using (StreamWriter sw = File.AppendText(_path))
-                {
-                    sw.WriteLine($"AnalystService - Log: Time={DateTime.Now}, " +
-                                    $"New threshold={threshold}, New interval={interval} " +
-                                    $"-> Sent to SensorService at uri {_url}threshold");
-                }
-            }*/
+            repository.PostAnalystResult(result);
         }
-        public List<string> ReadLog()
+
+        public IEnumerable<AnalystResult> ReadLog()
         {
-            /*return null;
-
-            List<string> list = new List<string>();
-            string s;
-            using (StreamReader sr = File.OpenText(_path))
-            {
-                while ((s = sr.ReadLine()) != null)
-                {
-                    list.Add(s);
-                }
-            }
-
-            return list;*/
-            return null;
+            return repository.GetAnalystResults();
         }
-        //----------------------------------------------------------------
-
 
         public async Task Analyze(SensorData sd)
         {
@@ -153,6 +118,7 @@ namespace AnalystService.Analyst
 
             var publisher = new Publisher();
             publisher.Publish(_ar, "AnalystServiceQueue");
+            _SaveLog(_ar);
 
             Console.WriteLine("AnalystService is published data");
         }

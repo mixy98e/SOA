@@ -19,7 +19,7 @@ services:
     ports:
       - 5000:80
     depends_on:
-      - mongo
+      - mongo-data
       - rabbitmq
 
   analystservice:
@@ -30,6 +30,7 @@ services:
       context: .
       dockerfile: AnalystService/Dockerfile
     depends_on:
+      - mongo-analyst
       - rabbitmq
 
 
@@ -43,12 +44,21 @@ services:
     depends_on:
       - rabbitmq
 
-  mongo:
+  mongo-data:
     image: mongo
+    hostname: "mongo-data"
     ports:
       - 27017:27017
     volumes:
-      - mongodata:/data/db
+      - mongodata1:/data/db
+
+  mongo-analyst:
+    image: mongo
+    hostname: "mongo-analyst"
+    ports:
+      - 27016:27017
+    volumes:
+      - mongodata2:/data/db
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -64,5 +74,5 @@ services:
       - "15672:15672"
 
 volumes:
-  mongodata:
-
+  mongodata1:
+  mongodata2:

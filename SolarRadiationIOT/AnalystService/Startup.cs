@@ -1,3 +1,4 @@
+using AnalystService.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +33,19 @@ namespace AnalystService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AnalystService", Version = "v1" });
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CORS", builder =>
+                {
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowAnyOrigin();
+                });
+            });
+            var connectionString = "mongodb://mongo-analyst:27017";
+            var client = new MongoClient(connectionString);
+            services.AddSingleton<IMongoClient>(client);
+            services.AddTransient<IAnalystServiceRepository, AnalystServiceRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +59,8 @@ namespace AnalystService
             }
 
             app.UseRouting();
+
+            app.UseCors("CORS");
 
             app.UseAuthorization();
 

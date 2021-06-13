@@ -1,17 +1,11 @@
 using DataService.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DataService
 {
@@ -42,7 +36,7 @@ namespace DataService
                            .AllowAnyOrigin();
                 });
             });
-            var connectionString = "mongodb://mongo:27017";
+            var connectionString = "mongodb://mongo-data:27017";
             var client = new MongoClient(connectionString);
             services.AddSingleton<IMongoClient>(client);
             services.AddTransient<ISolarPredictionRepository, SolarPredictionRepository>();

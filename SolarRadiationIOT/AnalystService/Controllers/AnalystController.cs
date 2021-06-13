@@ -31,7 +31,7 @@ namespace AnalystService.Controllers
         }
         
         [HttpGet("log")]
-        public ActionResult<List<string>> GetLog()
+        public IEnumerable<AnalystResult> GetLog()
         {
             return _da.ReadLog();
         }
