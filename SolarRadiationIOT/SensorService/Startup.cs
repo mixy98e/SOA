@@ -31,6 +31,15 @@ namespace SensorService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SensorService", Version = "v1" });
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CORS", builder =>
+                {
+                    builder.AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowAnyOrigin();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +53,8 @@ namespace SensorService
             }
 
             app.UseRouting();
+
+            app.UseCors("CORS");
 
             app.UseAuthorization();
 
