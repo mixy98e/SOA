@@ -11,7 +11,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnalystService", "AnalystService\AnalystService.csproj", "{F568831E-2950-4EBF-B858-3DE31E214700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandService", "CommandService\CommandService.csproj", "{D74B2E20-2B99-4427-A3EC-1FEB13B70BCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandService", "CommandService\CommandService.csproj", "{D74B2E20-2B99-4427-A3EC-1FEB13B70BCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayService", "GatewayService\GatewayService.csproj", "{F082C8B4-A644-4DE9-AA88-AE21043C4C4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D74B2E20-2B99-4427-A3EC-1FEB13B70BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D74B2E20-2B99-4427-A3EC-1FEB13B70BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D74B2E20-2B99-4427-A3EC-1FEB13B70BCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F082C8B4-A644-4DE9-AA88-AE21043C4C4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F082C8B4-A644-4DE9-AA88-AE21043C4C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F082C8B4-A644-4DE9-AA88-AE21043C4C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F082C8B4-A644-4DE9-AA88-AE21043C4C4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

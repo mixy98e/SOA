@@ -73,6 +73,15 @@ services:
       - "15671:15671"
       - "15672:15672"
 
+  gatewayservice:
+    image: ${DOCKER_REGISTRY-}gatewayservice
+    build:
+      context: .
+      dockerfile: GatewayService/Dockerfile
+    ports:
+      - 5004:80
+
 volumes:
   mongodata1:
   mongodata2:
+
