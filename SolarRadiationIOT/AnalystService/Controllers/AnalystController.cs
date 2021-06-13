@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AnalystService.Analyst;
 using AnalystService.Model;
 using AnalystService.Mqtt;
+using AnalystService.Repository;
 
 namespace AnalystService.Controllers
 {
@@ -14,13 +15,27 @@ namespace AnalystService.Controllers
     [ApiController]
     public class AnalystController : ControllerBase
     {
+        private IAnalystServiceRepository repository;
+
         DataAnalyst _da = new DataAnalyst();
 
+        public AnalystController(IAnalystServiceRepository repository)
+        {
+            this.repository = repository;
+        }
 
         [HttpGet("test")]
-        public ActionResult<string> GetTest()
+        public IActionResult GetTest()
         {
-            return $"[AnalystService] I am alive (log path = {_da.Path})";
+            repository.PostAnalystResult(new AnalystResult()
+            {
+                DayTimeDay = true,
+                HighRisk = false,
+                RadiationHigh = false,
+                TimeStamp = DateTime.Now,
+                WeatherGood = true
+            });
+            return Ok();
         }
 
         [HttpGet("startstop")]

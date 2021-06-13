@@ -9,6 +9,7 @@ using AnalystService.Model;
 using AnalystService.Mqtt;
 using AnalystService.Repository;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 
 namespace AnalystService.Analyst
@@ -20,7 +21,18 @@ namespace AnalystService.Analyst
         private DateTime _date1 = new DateTime(0001, 1, 1, 19, 0, 0);
         private DateTime _date2 = new DateTime(0001, 1, 1, 5, 0, 0);
         private string _path = "./Log.txt";
+        private IMongoClient mongo;
         private IAnalystServiceRepository repository;
+
+        public DataAnalyst()
+        {
+            mongo = new MongoClient("mongodb://mongo-analyst:27017");
+            repository = new AnalystServiceRepository(mongo);
+        }
+        //public DataAnalyst(IAnalystServiceRepository repository)
+        //{
+        //    this.repository = repository;
+        //}
 
 
         public bool Running
