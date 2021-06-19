@@ -75,10 +75,11 @@ namespace SensorService.Runner
             sensorData.Radiation = float.Parse(parsedData[3]);
             sensorData.Temperature = float.Parse(parsedData[4]);
             sensorData.Pressure = float.Parse(parsedData[5]);
-            sensorData.WindDirection = float.Parse(parsedData[6]);
-            sensorData.Speed = float.Parse(parsedData[7]);
-            sensorData.TimeSunRise = parsedData[8];
-            sensorData.TimeSunSet = parsedData[9];
+            sensorData.Humidity = float.Parse(parsedData[6]);
+            sensorData.WindDirection = float.Parse(parsedData[7]);
+            sensorData.Speed = float.Parse(parsedData[8]);
+            sensorData.TimeSunRise = parsedData[9];
+            sensorData.TimeSunSet = parsedData[10];
 
 
             float difference;

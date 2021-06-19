@@ -1,0 +1,23 @@
+body {
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 100px !important;
+  margin-left: 100px !important;
+}
+
+.checkers {
+  padding-top: 15px;
+  padding-bottom: 10px;
+  display: flex;
+  align-self: center;
+}
+
+.chartWindows {
+  width: 90%;
+}
+
+.headTitle {
+  align-self: center;
+  color: #121212;
+}
