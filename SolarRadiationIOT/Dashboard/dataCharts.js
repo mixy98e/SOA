@@ -102,7 +102,7 @@ function dravSplineChart(title, dataArray) {
   chart.render();
 }
 
-let data1 = [
+/*let data1 = [
   {
     lineColor: "#FC5404",
     yValueFormatString: "#,### Units",
@@ -124,7 +124,7 @@ let data1 = [
     ],
   },
 ];
-dravSplineChart("Chart tester", data1);
+dravSplineChart("Chart tester", data1);*/
 
 function fetchSensorData() {
   fetch("http://localhost:5004/data/all", {

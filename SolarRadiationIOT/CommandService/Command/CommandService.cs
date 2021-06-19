@@ -1,6 +1,5 @@
 ﻿using CommandService.Hubs;
 using CommandService.Model;
-using CommandService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
