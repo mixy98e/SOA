@@ -10,17 +10,19 @@ using System.Threading.Tasks;
 
 namespace CommandService.Mqtt
 {
-    public class Subscriber
+    public class Subscriber : ISubscriber
     {
-           
+
         private ConnectionFactory factory;
-        private Command.Command _cs = new Command.Command();
+        //private Command.CommandService _cs = new Command.CommandService();
+        private Command.CommandService _cs;
         private IModel channel;
         private IConnection connection;
 
 
-        public Subscriber()
+        public Subscriber(Command.CommandService cs)
         {
+            _cs = cs;
             factory = new ConnectionFactory()
             {
                 HostName = "rabbitmq",

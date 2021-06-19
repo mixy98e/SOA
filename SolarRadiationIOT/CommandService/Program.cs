@@ -14,8 +14,8 @@ namespace CommandService
     {
         public static void Main(string[] args)
         {
-            Subscriber sub = new Subscriber();
-            sub.Subscribe("AnalystServiceQueue");
+            /*Subscriber sub = new Subscriber();
+            sub.Subscribe("AnalystServiceQueue");*/
 
             CreateHostBuilder(args).Build().Run();
         }

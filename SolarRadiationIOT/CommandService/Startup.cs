@@ -1,3 +1,8 @@
+using CommandService.Command;
+using CommandService.Controllers;
+using CommandService.Hubs;
+using CommandService.Mqtt;
+using CommandService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +30,9 @@ namespace CommandService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddTransient<ICommandService, Command.CommandService>();
+            services.AddTransient<ISubscriber, Subscriber>();
+            services.AddHostedService<SignalRControllerService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -37,9 +44,13 @@ namespace CommandService
                 {
                     builder.AllowAnyHeader()
                            .AllowAnyMethod()
-                           .AllowAnyOrigin();
+                           //.AllowAnyOrigin() // Maybe it will need to set the specific origins!
+                           .WithOrigins("http://127.0.0.1:5501",
+                                        "http://127.0.0.1:5500")
+                           .AllowCredentials();
                 });
             });
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +72,7 @@ namespace CommandService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<CommandHub>("/commandhub");
             });
         }
     }

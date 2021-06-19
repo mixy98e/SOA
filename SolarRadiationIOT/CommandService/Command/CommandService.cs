@@ -1,5 +1,8 @@
-﻿using CommandService.Model;
+﻿using CommandService.Hubs;
+using CommandService.Model;
+using CommandService.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,13 +13,21 @@ using System.Threading.Tasks;
 
 namespace CommandService.Command
 {
-    public class Command
+    public class CommandService : ICommandService
     {
         private string _url = "http://sensorservice:80/Sensor/";
+
+        private readonly IHubContext<CommandHub> _hubContext;
+
+        public CommandService(IHubContext<CommandHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
+
         public void checkCommands(AnalystResult ar)
         {
             SensorMetaData smd =  _GetMetaDataFromSensorAsync().Result;
-
+            this.Notify("TEST 1 2 3");
             //testfun(69f, 69f);
 
             if (ar.DayTimeDay)
@@ -51,8 +62,6 @@ namespace CommandService.Command
                 _SetThreshold(0.025f, smd.Threshold);//0.025
                 Console.WriteLine("CommandProcessing: daytime night");
             }
-
-            
 
         }
 
@@ -152,5 +161,9 @@ namespace CommandService.Command
             _SetInterval(y,0);
         }
 
+        public async Task Notify(string msg)
+        {
+            await _hubContext.Clients.All.SendAsync("SendData", msg);
+        }
     }
 }
