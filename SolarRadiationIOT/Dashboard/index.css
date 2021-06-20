@@ -21,3 +21,11 @@ body {
   align-self: center;
   color: #121212;
 }
+
+.startstop {
+  width: 150px !important;
+}
+
+.sttstop {
+  display: inline;
+}

@@ -6,19 +6,47 @@ var connection = new signalR.HubConnectionBuilder()
 
 console.log(connection);
 // Funkcija koju trigeruje server
-connection.on("ReceiveMessage", function () {
+connection.on("ReceivedMsg", function (msg) {
   /*var li = document.createElement("li");
   li.textContent = "TEST";
   document.getElementById("messagesList").appendChild(li);*/
 
-  console.log("callback funkcija pozvana");
+  console.log("callback function call " + msg);
+  var nameArr = msg.split(",");
+
+  var item = $(
+    "<tr>" +
+      "<td>" +
+      nameArr[0] +
+      "</td>" +
+      "<td>" +
+      nameArr[1] +
+      "</td>" +
+      "<td>" +
+      nameArr[2] +
+      "</td>" +
+      "<td>" +
+      nameArr[3] +
+      "</td>" +
+      "<td>" +
+      nameArr[4] +
+      "</td>" +
+      "<td>" +
+      nameArr[5] +
+      "</td>" +
+      "</tr>"
+  );
+
+  $(".notifications").prepend(item);
 });
+// return unixTime + "," + interval + "," + threshold + "," + weatherStatus +
+// "," + radiationStatus + "," + periodOfDay;
 
 connection.start().then(function () {
   /*var li = document.createElement("li");
   li.textContent = "Connected!";
   document.getElementById("messagesList").appendChild(li);*/
-  console.log("konekcija uspesna");
+  console.log("Connection successfull");
 });
 
 /*document
@@ -28,7 +56,5 @@ connection.start().then(function () {
   });*/
 
 function initCommunicationSR() {
-  console.log("uso");
   connection.invoke("InitCommunication");
-  console.log("izaso");
 }

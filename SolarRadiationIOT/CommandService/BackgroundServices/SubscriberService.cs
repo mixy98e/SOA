@@ -1,5 +1,4 @@
-﻿using CommandService.Command;
-using CommandService.Mqtt;
+﻿using CommandService.Mqtt;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -7,20 +6,20 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CommandService.Controllers
+namespace CommandService.BackgroundServices
 {
-    public class SignalRControllerService : BackgroundService
+    public class SubscriberService : BackgroundService
     {
-        private readonly ISubscriber _subscriber;
+        private readonly ISubscriber subscriber;
 
-        public SignalRControllerService(ISubscriber subscriber)
+        public SubscriberService(ISubscriber subscriber)
         {
-            _subscriber = subscriber;
+            this.subscriber = subscriber;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _subscriber.Subscribe("AnalystServiceQueue");
+            subscriber.Subscribe("AnalystServiceQueue");
 
             while (!stoppingToken.IsCancellationRequested)
             {

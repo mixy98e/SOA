@@ -1,5 +1,4 @@
-using CommandService.Command;
-using CommandService.Controllers;
+using CommandService.BackgroundServices;
 using CommandService.Hubs;
 using CommandService.Mqtt;
 using Microsoft.AspNetCore.Builder;
@@ -29,10 +28,10 @@ namespace CommandService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ICommandService, Command.CommandService>();
-            services.AddTransient<ISubscriber, Subscriber>();
-            services.AddHostedService<SignalRControllerService>();
+
             services.AddControllers();
+            services.AddHostedService<SubscriberService>();
+            services.AddTransient<ISubscriber, Subscriber>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CommandService", Version = "v1" });
@@ -47,9 +46,10 @@ namespace CommandService
                            .WithOrigins("http://127.0.0.1:5501",
                                         "http://127.0.0.1:5500")
                            .AllowCredentials();
+
                 });
             });
-            services.AddSignalR();
+            services.AddSignalR(options => options.EnableDetailedErrors = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

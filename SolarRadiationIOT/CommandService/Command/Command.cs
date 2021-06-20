@@ -1,7 +1,5 @@
-﻿using CommandService.Hubs;
-using CommandService.Model;
+﻿using CommandService.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,55 +10,82 @@ using System.Threading.Tasks;
 
 namespace CommandService.Command
 {
-    public class CommandService : ICommandService
+    public class Command
     {
         private string _url = "http://sensorservice:80/Sensor/";
-
-        private readonly IHubContext<CommandHub> _hubContext;
-
-        public CommandService(IHubContext<CommandHub> hubContext)
-        {
-            _hubContext = hubContext;
-        }
-
-        public void checkCommands(AnalystResult ar)
+        public string checkCommands(AnalystResult ar)
         {
             SensorMetaData smd =  _GetMetaDataFromSensorAsync().Result;
-            this.Notify("TEST 1 2 3");
+            string msg = string.Empty;
             //testfun(69f, 69f);
+
+            DateTime unixTime = DateTime.Now;
+            string interval = "";
+            string threshold = "";
+            string weatherStatus = "";
+            string radiationStatus = "";
+            string periodOfDay = "";
 
             if (ar.DayTimeDay)
             {
                 Console.WriteLine("CommandProcessing: daytime day");
+                periodOfDay = "Day time";
                 if (ar.RadiationHigh)
                 {
                     Console.WriteLine("CommandProcessing: radiation high");
+                    radiationStatus = "High";
+                   
                     if (ar.WeatherGood)
                     {
                         _SetInterval(5000f, smd.Interval); //interval=5s i tsh=2.5
                         Console.WriteLine("CommandProcessing: weather good");
+                        weatherStatus = "Good";
+                        interval = "5000ms";
                     }
                     else
                     {
-                        _SetInterval(15000f, smd.Interval);//interval=15s i tsh=2.5
+                        _SetInterval(10000f, smd.Interval);//interval=15s i tsh=2.5
                         Console.WriteLine("CommandProcessing: weather bad");
+                        weatherStatus = "Bad";
+                        interval = "7500ms";
+
                     }
                     _SetThreshold(25f, smd.Threshold);
+                    threshold = "25";
                 }
                 else
                 {
                     Console.WriteLine("CommandProcessing: radiation low");
+                    radiationStatus = "Low";
                     // int 10s tsh 75
-                    _SetInterval(10000f, smd.Interval);
+                    _SetInterval(7500f, smd.Interval);
                     _SetThreshold(75f, smd.Threshold);
+                    interval = "7500ms";
+                    threshold = "75";
                 }
             }
             else 
             {
-                _SetInterval(15000f, smd.Interval);
+                _SetInterval(10000f, smd.Interval);
                 _SetThreshold(0.025f, smd.Threshold);//0.025
                 Console.WriteLine("CommandProcessing: daytime night");
+                periodOfDay = "Night time";
+                interval = "10000ms";
+                threshold = "0.025";
+
+                if (ar.RadiationHigh)
+                    radiationStatus = "High";
+                else radiationStatus = "Low";
             }
+
+
+                if (ar.WeatherGood)
+                weatherStatus = "Good";
+            else
+                weatherStatus = "Bad";
+
+            return unixTime + "," + interval + "," + threshold + "," + weatherStatus +
+                "," + radiationStatus + "," + periodOfDay;
 
         }
 
@@ -160,9 +185,5 @@ namespace CommandService.Command
             _SetInterval(y,0);
         }
 
-        public async Task Notify(string msg)
-        {
-            await _hubContext.Clients.All.SendAsync("SendData", msg);
-        }
     }
 }

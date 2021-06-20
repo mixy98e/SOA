@@ -11,6 +11,11 @@
       <!-- <div onload="initCommunicationSR()">...</div> -->
         <p class="h2 headTitle">Solar Radiation IOT Microservice Dashboard</p>
         <!--<button onclick="fetchSensorData()">test test test</button>-->
+        <div class="sttstop">
+          <button type="button" class="btn btn-success startstop" onclick="startSystem()">Start System</button>
+          <button type="button" class="btn btn-danger startstop" onclick="stopSystem()">Stop System</button>
+        </div>
+
         <div class="btn-group checkers" role="group" onclick="buttonSelection(this)" aria-label="Basic checkbox toggle button group">
             <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
             <label class="btn btn-outline-primary" for="btncheck1" >Radiation</label>
@@ -30,11 +35,11 @@
             <input type="checkbox" class="btn-check" id="btncheck6" autocomplete="off">
             <label class="btn btn-outline-primary" for="btncheck6" >Speed</label>
 
-            <input type="checkbox" class="btn-check" id="btncheck7" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck7" >Time Sun Rise</label>
+            <input hidden type="checkbox" class="btn-check" id="btncheck7" autocomplete="off">
+            <label hidden class="btn btn-outline-primary" for="btncheck7" >Time Sun Rise</label>
 
-            <input type="checkbox" class="btn-check" id="btncheck8" autocomplete="off">
-            <label class="btn btn-outline-primary" for="btncheck8" >Time Sun Set</label>
+            <input hidden type="checkbox" class="btn-check" id="btncheck8" autocomplete="off">
+            <label hidden class="btn btn-outline-primary" for="btncheck8" >Time Sun Set</label>
         </div>
 
         <div id="chartContainer" class="chartWindows" style="height: 370px; width: 100%;"></div>
@@ -46,34 +51,24 @@
         <table class="table">
             <thead>
               <tr>
-                <th scope="col">#</th>
                 <th scope="col">Timestamp</th>
-                <th scope="col">Command</th>
-                <th scope="col">Condition</th>
-                <th scope="col">Threshold</th>
                 <th scope="col">Interval</th>
-                <th scope="col">Status</th>
+                <th scope="col">Threshold</th>
+                <th scope="col">Weather Status</th>
+                <th scope="col">Radiation Status</th>
+                <th scope="col">Period of Day</th>
               </tr>
             </thead>
             <tbody class="notifications">
-              <tr>
-                <th scope="row">1</th>
+              <!--<tr>
                 <td>Mark</td>
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td>@mdo</td>
                 <td>@mdo</td>
                 <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-              </tr>
+              </tr>-->
+              
               <!--<tr>
                 <th scope="row">3</th>
                 <td colspan="2">Larry the Bird</td>
@@ -81,7 +76,7 @@
               </tr>-->
             </tbody>
         </table>
-        <button onclick="addTestData()">test btn</button>
+        <!--<button onclick="addTestData()">test btn</button>-->
 
 
 

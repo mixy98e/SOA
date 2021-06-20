@@ -1,4 +1,6 @@
-﻿using CommandService.Model;
+﻿using CommandService.Hubs;
+using CommandService.Model;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -12,17 +14,17 @@ namespace CommandService.Mqtt
 {
     public class Subscriber : ISubscriber
     {
-
+           
         private ConnectionFactory factory;
-        //private Command.CommandService _cs = new Command.CommandService();
-        private Command.CommandService _cs;
+        private Command.Command _cs = new Command.Command();
         private IModel channel;
         private IConnection connection;
+        private IHubContext<CommandHub> hubContext;
 
-
-        public Subscriber(Command.CommandService cs)
+        public Subscriber(IHubContext<CommandHub> hubContext)
         {
-            _cs = cs;
+            this.hubContext = hubContext;
+    
             factory = new ConnectionFactory()
             {
                 HostName = "rabbitmq",
@@ -54,7 +56,9 @@ namespace CommandService.Mqtt
                 Console.WriteLine("Command service: Deserialized object from message: object=" + analystResult.RadiationHigh);
 
                 //send object for further command sending
-                _cs.checkCommands(analystResult);
+                string msg = _cs.checkCommands(analystResult);
+                //Console.WriteLine("Command Received");
+                this.hubContext.Clients.All.SendAsync("ReceivedMsg", msg);
             };
 
             channel.BasicConsume(queue: qName,
