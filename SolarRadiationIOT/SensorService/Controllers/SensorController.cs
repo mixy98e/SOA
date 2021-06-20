@@ -17,6 +17,8 @@ namespace SensorService.Controllers
     {
         private SensorContext _sc = SensorContext.Instance;
 
+        
+
         [HttpGet("metadata")]
         public ActionResult<Object> GetMetaData()
         {
@@ -42,6 +44,15 @@ namespace SensorService.Controllers
             SensorRunner.StopSensor();
             return Ok();
         }
+
+        [HttpGet("manualTick")]
+        public IActionResult GetManualTick()
+        {
+            SensorRunner.SendData();
+            
+            return Ok("manual tick");
+        }
+
 
         [HttpPut("interval")]
         public IActionResult PutInt([FromBody]int newInterval)

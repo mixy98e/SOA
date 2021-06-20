@@ -7,6 +7,10 @@ using DataService.Repository;
 using DataService.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
+using DataService.Mqtt;
 
 namespace DataService.Controllers
 {
@@ -36,9 +40,15 @@ namespace DataService.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] SensorData data)
         {
+            // Upis u bazu
             repository.PostSensorData(data);
 
-            return Ok();//CreatedAtAction(nameof(GetAll), new { id = data.UnixTime }, data);
+            // Slanje na analizu
+            var publisher = new Publisher();
+            publisher.Publish(data, "DataServiceQueue");
+
+
+            return Ok();
         }
     }
 }

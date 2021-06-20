@@ -1,0 +1,117 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/SensorData/all",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "dataservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/data/all",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "dataservice"
+    },
+    {
+      "DownstreamPathTemplate": "/SensorData/last",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "dataservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/data/last",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "dataservice"
+    },
+    {
+      "DownstreamPathTemplate": "/SensorData",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "dataservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/data/post",
+      "UpstreamHttpMethod": [ "Post" ],
+      "SwaggerKey": "dataservice"
+    },
+    {
+      "DownstreamPathTemplate": "/Sensor/start",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "sensorservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/sensor/start",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "sensorservice"
+    },
+    {
+      "DownstreamPathTemplate": "/Sensor/stop",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "sensorservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/sensor/stop",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "sensorservice"
+    },
+    {
+      "DownstreamPathTemplate": "/Analyst/log",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "analystservice",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/analyst/log",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "analystservice"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "dataservice",
+      "Config": [
+        {
+          "Name": "dataservice",
+          "Version": "v1",
+          "Url": "http://dataservice:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "sensorservice",
+      "Config": [
+        {
+          "Name": "sensorservice",
+          "Version": "v1",
+          "Url": "http://sensorservice:80/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "analystservice",
+      "Config": [
+        {
+          "Name": "analystservice",
+          "Version": "v1",
+          "Url": "http://analystservice:80/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5004"
+  }
+}

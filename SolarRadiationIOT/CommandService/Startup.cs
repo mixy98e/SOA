@@ -1,3 +1,6 @@
+using CommandService.BackgroundServices;
+using CommandService.Hubs;
+using CommandService.Mqtt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SensorService
+namespace CommandService
 {
     public class Startup
     {
@@ -26,10 +29,12 @@ namespace SensorService
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
+            services.AddControllers();
+            services.AddHostedService<SubscriberService>();
+            services.AddTransient<ISubscriber, Subscriber>();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SensorService", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CommandService", Version = "v1" });
             });
             services.AddCors(options =>
             {
@@ -37,9 +42,14 @@ namespace SensorService
                 {
                     builder.AllowAnyHeader()
                            .AllowAnyMethod()
-                           .AllowAnyOrigin();
+                           //.AllowAnyOrigin() // Maybe it will need to set the specific origins!
+                           .WithOrigins("http://127.0.0.1:5501",
+                                        "http://127.0.0.1:5500")
+                           .AllowCredentials();
+
                 });
             });
+            services.AddSignalR(options => options.EnableDetailedErrors = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +59,7 @@ namespace SensorService
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SensorService v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CommandService v1"));
             }
 
             app.UseRouting();
@@ -61,6 +71,7 @@ namespace SensorService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<CommandHub>("/commandhub");
             });
         }
     }

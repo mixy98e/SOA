@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SensorService.Runner
 {
-    public class SensorRunner
+    public static class SensorRunner
     {
         private static System.Timers.Timer _aTimer;
 
@@ -45,18 +45,24 @@ namespace SensorService.Runner
         private static void OnTimerEvent(Object source, ElapsedEventArgs e)
         {
             Console.WriteLine("Tick tick tick ...", e.SignalTime);
+
+            //kocnica
+            //_aTimer.Stop();
+
             SendData();
         }
 
         public static void ChgSensorInterval(int newTickTime)
         {
             _sc.SetInterval(newTickTime);
+            if (_aTimer == null)
+                return;
             _aTimer.Stop();
             _aTimer.Interval = newTickTime;
             _aTimer.Start();
         }
 
-        private static void SendData()
+        public static void SendData() //private -> public
         {
             Console.WriteLine($"uso0, {_sc.GetSourcePath()}");
             string line = File.ReadLines(_sc.GetSourcePath()).Skip(currLine).Take(1).First();
@@ -69,10 +75,11 @@ namespace SensorService.Runner
             sensorData.Radiation = float.Parse(parsedData[3]);
             sensorData.Temperature = float.Parse(parsedData[4]);
             sensorData.Pressure = float.Parse(parsedData[5]);
-            sensorData.WindDirection = float.Parse(parsedData[6]);
-            sensorData.Speed = float.Parse(parsedData[7]);
-            sensorData.TimeSunRise = parsedData[8];
-            sensorData.TimeSunSet = parsedData[9];
+            sensorData.Humidity = float.Parse(parsedData[6]);
+            sensorData.WindDirection = float.Parse(parsedData[7]);
+            sensorData.Speed = float.Parse(parsedData[8]);
+            sensorData.TimeSunRise = parsedData[9];
+            sensorData.TimeSunSet = parsedData[10];
 
 
             float difference;
@@ -116,7 +123,7 @@ namespace SensorService.Runner
 
                 try
                 {
-                    using (var response = await httpClient.PostAsync("http://host.docker.internal:5000/SensorData", content))
+                    using (var response = await httpClient.PostAsync("http://dataservice:80/SensorData", content))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
                         return new JsonResult(
@@ -133,8 +140,7 @@ namespace SensorService.Runner
                     Console.WriteLine(e.StackTrace);
                 }
                 
-                return null;
-                
+                return null;                
             }
         }
 
