@@ -1,6 +1,6 @@
 SolarRadiationIOT
 
-https://raw.githubusercontent.com/mixy98e/SOA/main/SolarRadiationIOT/Architecture.jpg
+![alt text](https://github.com/mixy98e/SOA/main/SolarRadiationIOT/Architecture.jpg?raw=true)
 
 Project:
 .Net Core Microservices using Docker and Docker-Compose
@@ -11,13 +11,13 @@ build
 
 >docker-compose up --build
 >command result: 
-	3 services
 	-DataService
 	-SensorService
 	-MongoDB
-	
-	1 volume
-	-MongoDB volume
+	-AnalystService
+	-CommandService
+	-OceloteGateway
+	-RabbitMQ
 
 DataService API:
 ----------------
