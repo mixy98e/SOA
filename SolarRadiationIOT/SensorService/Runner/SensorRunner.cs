@@ -20,11 +20,11 @@ namespace SensorService.Runner
 
         private static SensorContext _sc = SensorContext.Instance;
 
-        private static int currLine;
+        private static int currLine = 0; //modified from "currLine;" to "currLine = 0;" uncomment line 27
         private static float lastRadiation;
         public static void StartSensor()
         {
-            currLine = 0;
+            //currLine = 0;
             lastRadiation = 0;
             SetTimer(_sc.GetInterval());
         }
