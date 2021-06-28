@@ -1,6 +1,6 @@
 SolarRadiationIOT
 
-![alt text](https://github.com/mixy98e/SOA/main/SolarRadiationIOT/Architecture.jpg?raw=true)
+![alt text](https://raw.githubusercontent.com/mixy98e/SOA/main/SolarRadiationIOT/Architecture.jpg?raw=true)
 
 Project:
 .Net Core Microservices using Docker and Docker-Compose
